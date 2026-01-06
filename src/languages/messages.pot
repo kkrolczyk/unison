@@ -1,0 +1,8 @@
+msgid "WelcomeProfileCreationAssistant"
+msgstr "Welcome to the Unison Profile Creation Assistant.\n\n\
+        Click \"Next\" to begin."
+msgid "Hello"
+msgstr "Hello-World"
+msgid "Goodbye"
+msgstr "Goodbye world!"
+

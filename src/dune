@@ -4,6 +4,13 @@
  (modules compat_digest))
 
 (library
+ (name internationalization)
+; (wrapped false)
+ (libraries gettext.base lablgtk3)
+; (libraries gettext.base)
+ (modules languages))
+
+(library
  (name unison_lib)
  (wrapped false)
  (modules :standard \ linktext linkgtk3 uigtk3 pixmaps uimacbridge test make_tools compat_digest)

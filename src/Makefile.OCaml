@@ -36,9 +36,10 @@ macuimaybe:
 ####################################################################
 ### Default parameters
 
-INCLFLAGS = -I lwt -I ubase -I system -I system/$(SYSTEM) -I lwt/$(SYSTEM)
+INCLFLAGS = -I lwt -I ubase -I system -I system/$(SYSTEM) -I lwt/$(SYSTEM) -I languages
 DEP_INCLFLAGS = -I lwt -I ubase -I system \
-                -I fsmonitor -I fsmonitor/inotify -I fsmonitor/solaris -I fsmonitor/windows
+                -I fsmonitor -I fsmonitor/inotify -I fsmonitor/solaris -I fsmonitor/windows \
+                -I languages
 
 ubase/projectInfo.ml: Makefile.ProjectInfo
 	ocaml make_tools.ml projectinfo NAME="$(NAME)" VERSION="$(VERSION)" MAJORVERSION="$(MAJORVERSION)" > $@
@@ -67,6 +68,8 @@ OCAMLOBJS = \
           \
           lwt/pqueue.cmo lwt/lwt.cmo lwt/lwt_util.cmo \
           lwt/$(SYSTEM)/lwt_unix_impl.cmo lwt/lwt_unix.cmo \
+          \
+          languages/languages.cmo \
           \
           features.cmo uutil.cmo case.cmo pred.cmo terminal.cmo \
           fileutil.cmo name.cmo path.cmo fspath.cmo fs.cmo fingerprint.cmo \

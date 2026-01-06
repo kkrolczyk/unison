@@ -18,8 +18,13 @@
 
 open Common
 open Lwt
+open Languages
 
 module Private = struct
+
+(* TODO: remove me *)
+let () =
+    internationalization_enabled ()
 
 let debug = Trace.debug "ui"
 
@@ -1154,6 +1159,7 @@ let createProfile parent =
       ~xpad:12 ~ypad:12
       ~text:"Welcome to the Unison Profile Creation Assistant.\n\n\
              Click \"Next\" to begin."
+(*      ~text: s_ WelcomeProfileCreationAssistant *)
     () in
   ignore
     (assistant#append_page

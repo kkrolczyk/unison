@@ -1,0 +1,9 @@
+(include_subdirs no)
+
+; (libraries gettext.base lablgtk3)
+
+(library
+ (name internationalization)
+ (wrapped false)
+ (libraries gettext.base)
+ (modules languages))
