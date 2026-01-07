@@ -1,5 +1,5 @@
 module TranslateProg = Gettext.Program (struct
-  let textdomain = "mydomain"
+  let textdomain = "unison"
   let codeset = Some "UTF-8"
   let dir = None
   let dependencies = Gettext.init
