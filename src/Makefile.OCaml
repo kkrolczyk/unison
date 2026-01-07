@@ -84,8 +84,8 @@ OCAMLOBJS = \
 
 # OCaml libraries for the bytecode version
 # File extensions will be substituted for the native code version
-OCAMLLIBS = unix.cma str.cma
-OCAMLINCLUDES = -I +unix -I +str
+OCAMLLIBS = unix.cma str.cma gettext.cma
+OCAMLINCLUDES = -I +unix -I +str -I +gettext
 
 # C objects for both bytecode and native versions
 COBJS = osxsupport$(OBJ_EXT) pty$(OBJ_EXT) bytearray_stubs$(OBJ_EXT) \
@@ -105,7 +105,7 @@ CAMLFLAGS_MAC = -I +threads
 
 ## Graphic UI
 OCAMLOBJS_GUI = pixmaps.cmo uigtk3.cmo linkgtk3.cmo
-OCAMLLIBS_GUI = lablgtk3.cma cairo.cma
+OCAMLLIBS_GUI = lablgtk3.cma cairo.cma gettext.cma
 
 ####################################################################
 ### Unison executables
@@ -296,6 +296,7 @@ clean::
 	-(cd lwt && $(RM_FILES))
 	-(cd lwt/generic && $(RM_FILES))
 	-(cd lwt/win && $(RM_FILES))
+	-(cd languages && $(RM_FILES))
 
 .PHONY: paths
 paths:

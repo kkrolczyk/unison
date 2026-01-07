@@ -305,7 +305,7 @@ let () =
       (* The weird quoting is required for Windows, but harmless in sh *)
       shell (cmd ^ " query -format \"-I \"\"%d\"\"\" lablgtk3") ^ " " ^
       shell (cmd ^ " query -format \"-I \"\"%d\"\"\" cairo2")
-  | None -> "-I +lablgtk3 -I +cairo2"
+  | None -> "-I +lablgtk3 -I +cairo2 -I +gettext"
 
 let () =
   if osarch_macos && is_empty inputs.$("XCODEFLAGS") then
