@@ -18,13 +18,10 @@
 
 open Common
 open Lwt
-open Languages
+open LanguagesLib
 
 module Private = struct
 
-(* TODO: remove me *)
-let () =
-    internationalization_enabled ()
 
 let debug = Trace.debug "ui"
 

@@ -69,7 +69,7 @@ OCAMLOBJS = \
           lwt/pqueue.cmo lwt/lwt.cmo lwt/lwt_util.cmo \
           lwt/$(SYSTEM)/lwt_unix_impl.cmo lwt/lwt_unix.cmo \
           \
-          languages/languages.cmo \
+          languages/languagesLib.cmo languages/languagesBin.cmo \
           \
           features.cmo uutil.cmo case.cmo pred.cmo terminal.cmo \
           fileutil.cmo name.cmo path.cmo fspath.cmo fs.cmo fingerprint.cmo \
