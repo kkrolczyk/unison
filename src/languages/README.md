@@ -62,6 +62,8 @@ When `unison` is distributed as a package (like a deb), package maintainer would
 
 [ ] workdir is clean, make is run either without opam environment initialized or opam installed, but uses system OCaml and system libraries - it will build until failing to find opam package
 
+[ ] while `unison` (cmdline) works, it seems `unison-gui` segfaults
+
 
 It might be totally possible, that above gettext from how-to is too C-like, and ocaml-gettext is doing stuff differently
 Makefile on its GH page suggest that is the case - and it seems to be preferred, due to ocaml support added (as a patch) to normal gettext.

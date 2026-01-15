@@ -36,17 +36,17 @@ guimaybe:
 macuimaybe:
 
 ####################################################################
-TEMP_STUFF_OPAM_LINKING = -I ${HOME}/.opam/default/lib/camomile/default_config \
-		-I ${HOME}/.opam/default/lib/camomile/library        \
-		-I ${HOME}/.opam/default/lib/camomile/lib_default    \
-		-I ${HOME}/.opam/default/lib/camomile/dyn            \
-		-I ${HOME}/.opam/default/lib/camomile                \
-		-I ${HOME}/.opam/default/lib/bytes                   \
-		-I ${HOME}/.opam/default/lib/fileutils               \
-		-I ${HOME}/.opam/default/lib/gettext                 \
-		-I ${HOME}/.opam/default/lib/gettext/base            \
-		-I ${HOME}/.opam/default/lib/gettext/extension       \
-		-I ${HOME}/.opam/default/lib/gettext-camomile
+GETTEXT_DIRS = -I $(OCAMLPATH)/camomile/default_config \
+		-I $(OCAMLPATH)/camomile/library        \
+		-I $(OCAMLPATH)/camomile/lib_default    \
+		-I $(OCAMLPATH)/camomile/dyn            \
+		-I $(OCAMLPATH)/camomile                \
+		-I $(OCAMLPATH)/bytes                   \
+		-I $(OCAMLPATH)/fileutils               \
+		-I $(OCAMLPATH)/gettext                 \
+		-I $(OCAMLPATH)/gettext/base            \
+		-I $(OCAMLPATH)/gettext/extension       \
+		-I $(OCAMLPATH)/gettext-camomile
 
 ####################################################################
 ### Default parameters
@@ -54,7 +54,7 @@ TEMP_STUFF_OPAM_LINKING = -I ${HOME}/.opam/default/lib/camomile/default_config \
 INCLFLAGS = -I lwt -I ubase -I system -I system/$(SYSTEM) -I lwt/$(SYSTEM) -I languages
 DEP_INCLFLAGS = -I lwt -I ubase -I system \
                 -I fsmonitor -I fsmonitor/inotify -I fsmonitor/solaris -I fsmonitor/windows \
-                $(TEMP_STUFF_OPAM_LINKING) -I languages
+                $(GETTEXT_DIRS) -I languages
 
 ubase/projectInfo.ml: Makefile.ProjectInfo
 	ocaml make_tools.ml projectinfo NAME="$(NAME)" VERSION="$(VERSION)" MAJORVERSION="$(MAJORVERSION)" > $@
@@ -98,16 +98,13 @@ OCAMLOBJS = \
           main.cmo
 
 
-# TODO: no reason to actually scan for those, if fixed version of gettext is used, can be replaced with hardcoded names
-ALL_GETTEXT_IMPLS := $(wildcard $(addsuffix /*.cmxa,$(TEMP_STUFF_OPAM_LINKING)))
-OCAML_LIB_DIR := $(shell ocamlc -where)
-GETTEXT_IMPLS := $(filter-out $(OCAML_LIB_DIR), $(ALL_GETTEXT_IMPLS))
-# $(shell ocamlfind query -recursive -predicates native -l-format gettext gettext.base gettext.extension gettext-camomile camomile)
+# hardcoded dependencies, given that version is frozen to 0.4.2
+GETTEXT_IMPLS = $(OCAMLPATH)/camomile/default_config/camomileDefaultConfig.cmxa $(OCAMLPATH)/camomile/library/camomileLibrary.cmxa $(OCAMLPATH)/camomile/lib_default/camomileLibraryDefault.cmxa $(OCAMLPATH)/camomile/dyn/camomileLibraryDyn.cmxa $(OCAMLPATH)/camomile/camomile_yuge.cmxa $(OCAMLPATH)/fileutils/fileutils.cmxa $(OCAMLPATH)/gettext/gettext.cmxa $(OCAMLPATH)/gettext/base/gettextBase.cmxa $(OCAMLPATH)/gettext/extension/gettextExtension.cmxa $(OCAMLPATH)/gettext-camomile/gettextCamomile.cmxa
 
 # OCaml libraries for the bytecode version
 # File extensions will be substituted for the native code version
 OCAMLLIBS = unix.cma str.cma bigarray.cmxa $(GETTEXT_IMPLS)
-OCAMLINCLUDES = -I +unix -I +str $(TEMP_STUFF_OPAM_LINKING) -I languages
+OCAMLINCLUDES = -I +unix -I +str $(GETTEXT_DIRS) -I languages
 
 # C objects for both bytecode and native versions
 COBJS = osxsupport$(OBJ_EXT) pty$(OBJ_EXT) bytearray_stubs$(OBJ_EXT) \
@@ -127,7 +124,7 @@ CAMLFLAGS_MAC = -I +threads
 
 ## Graphic UI
 OCAMLOBJS_GUI = pixmaps.cmo uigtk3.cmo linkgtk3.cmo
-OCAMLLIBS_GUI = lablgtk3.cma cairo.cma gettext.cma gettextCamomile.cma
+OCAMLLIBS_GUI = lablgtk3.cma cairo.cma $(GETTEXT_IMPLS)
 
 ####################################################################
 ### Unison executables
@@ -238,13 +235,11 @@ include Makefile2.cfg
 
 $(NAME)$(EXEC_EXT): $(COMPAT_OBJS) $(CAMLOBJS) $(CAMLOBJS_TUI) $(COBJS)
 	@echo Linking $@
-	$(CAMLC) -verbose $(CAMLFLAGS_X) $(CAMLLDFLAGS) -o $@ \
-		$(GETTEXT_IMPLS) \
-		$(CAMLLIBS) $(ALL__SRC) $(CLIBS)
+	$(CAMLC) -verbose $(CAMLFLAGS_X) $(CAMLLDFLAGS) -o $@ $(GETTEXT_IMPLS) $(CAMLLIBS) $(ALL__SRC) $(CLIBS)
 
 $(NAME_GUI)$(EXEC_EXT): $(COMPAT_OBJS) $(CAMLOBJS) $(CAMLOBJS_GUI) $(COBJS)
 	@echo Linking $@
-	$(CAMLC) -verbose $(CAMLFLAGS_X) $(CAMLLDFLAGS) $(CAMLLDFLAGS_GUI) -o $@ $(CAMLLIBS) $(CAMLLIBS_GUI) $(ALL__SRC) $(CLIBS)
+	$(CAMLC) -verbose $(CAMLFLAGS_X) $(CAMLLDFLAGS) $(CAMLLDFLAGS_GUI) -o $@ $(GETTEXT_IMPLS) $(CAMLLIBS) $(CAMLLIBS_GUI) $(ALL__SRC) $(CLIBS)
 
 $(NAME_FSM)$(EXEC_EXT): $(COMPAT_OBJS) $(CAMLOBJS_FSM) $(FSMCOBJS)
 	@echo Linking $@
