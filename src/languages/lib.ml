@@ -4,3 +4,4 @@ module TranslateLib = Gettext.Library (struct
   let dir = None
   let dependencies = Gettext.init
 end)
+include Gettext

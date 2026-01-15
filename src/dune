@@ -7,8 +7,7 @@
  (name internationalization)
  (wrapped false)
  (libraries gettext.base gettext.camomile)
-; (libraries gettext.base)
- (modules languagesBin languagesLib))
+ (modules bin lib))
 
 (library
  (name unison_lib)

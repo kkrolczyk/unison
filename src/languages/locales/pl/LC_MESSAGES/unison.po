@@ -11,19 +11,14 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-msgid "TranslationTestString"
-msgstr "To jest testowy ciąg znaków dla języka polskiego: Zażółć gęślą jaźń"
-
-#, fuzzy
-msgid "TranslationTestString2"
-msgstr "To jest testowy ciąg znaków dla języka polskiego: Zażółć gęślą jaźń"
-
 msgid "SomethingElseIsAdded"
 msgstr "Something else is here - tak to wygląda zanim zostanie przetłumaczone"
 
-#~ msgid "WelcomeProfileCreationAssistant"
-#~ msgstr ""
-#~ "Blablabla.\n"
-#~ "\n"
-#~ "       \n"
-#~ "Click \"Next\" to begin."
+msgid "TranslationTestString"
+msgstr "To jest testowy ciąg znaków dla języka polskiego: Zażółć gęślą jaźń"
+
+msgid "TranslationTestString2"
+msgstr "To jest testowy ciąg znaków dla języka polskiego: Zażółć gęślą jaźń"
+
+msgid "print version and exit"
+msgstr "wyświetl wersję i zakończ działanie"

@@ -18,7 +18,7 @@
 
 open Common
 open Lwt
-open LanguagesLib
+open Lib
 
 module Private = struct
 
@@ -1154,9 +1154,10 @@ let createProfile parent =
   let intro =
     GMisc.label
       ~xpad:12 ~ypad:12
-      ~text:"Welcome to the Unison Profile Creation Assistant.\n\n\
+ (*       ~text:"Welcome to the Unison Profile Creation Assistant.\n\n\
              Click \"Next\" to begin."
-(*      ~text: s_ WelcomeProfileCreationAssistant *)
+          ~text: (s_ "WelcomeProfileCreationAssistant") *)
+          ~text: (Lib.TranslateLib.s_ "TranslationTestString")
     () in
   ignore
     (assistant#append_page

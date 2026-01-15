@@ -7,6 +7,8 @@
 # (d)make and NMAKE. Do not make any changes in this file unless you are
 # certain that the changes do not break this portability.
 
+export OCAMLPATH := $(shell opam var lib)
+
 all: tui guimaybe macuimaybe fsmonitor
 .PHONY: all # This .PHONY definition must come after the first target,
             # so that make implementations which don't support .PHONY
@@ -34,12 +36,25 @@ guimaybe:
 macuimaybe:
 
 ####################################################################
+TEMP_STUFF_OPAM_LINKING = -I ${HOME}/.opam/default/lib/camomile/default_config \
+		-I ${HOME}/.opam/default/lib/camomile/library        \
+		-I ${HOME}/.opam/default/lib/camomile/lib_default    \
+		-I ${HOME}/.opam/default/lib/camomile/dyn            \
+		-I ${HOME}/.opam/default/lib/camomile                \
+		-I ${HOME}/.opam/default/lib/bytes                   \
+		-I ${HOME}/.opam/default/lib/fileutils               \
+		-I ${HOME}/.opam/default/lib/gettext                 \
+		-I ${HOME}/.opam/default/lib/gettext/base            \
+		-I ${HOME}/.opam/default/lib/gettext/extension       \
+		-I ${HOME}/.opam/default/lib/gettext-camomile
+
+####################################################################
 ### Default parameters
 
 INCLFLAGS = -I lwt -I ubase -I system -I system/$(SYSTEM) -I lwt/$(SYSTEM) -I languages
 DEP_INCLFLAGS = -I lwt -I ubase -I system \
                 -I fsmonitor -I fsmonitor/inotify -I fsmonitor/solaris -I fsmonitor/windows \
-                -I languages
+                $(TEMP_STUFF_OPAM_LINKING) -I languages
 
 ubase/projectInfo.ml: Makefile.ProjectInfo
 	ocaml make_tools.ml projectinfo NAME="$(NAME)" VERSION="$(VERSION)" MAJORVERSION="$(MAJORVERSION)" > $@
@@ -69,7 +84,7 @@ OCAMLOBJS = \
           lwt/pqueue.cmo lwt/lwt.cmo lwt/lwt_util.cmo \
           lwt/$(SYSTEM)/lwt_unix_impl.cmo lwt/lwt_unix.cmo \
           \
-          languages/languagesLib.cmo languages/languagesBin.cmo \
+          languages/lib.cmo languages/bin.cmo \
           \
           features.cmo uutil.cmo case.cmo pred.cmo terminal.cmo \
           fileutil.cmo name.cmo path.cmo fspath.cmo fs.cmo fingerprint.cmo \
@@ -82,10 +97,17 @@ OCAMLOBJS = \
           strings.cmo uicommon.cmo uitext.cmo test.cmo \
           main.cmo
 
+
+# TODO: no reason to actually scan for those, if fixed version of gettext is used, can be replaced with hardcoded names
+ALL_GETTEXT_IMPLS := $(wildcard $(addsuffix /*.cmxa,$(TEMP_STUFF_OPAM_LINKING)))
+OCAML_LIB_DIR := $(shell ocamlc -where)
+GETTEXT_IMPLS := $(filter-out $(OCAML_LIB_DIR), $(ALL_GETTEXT_IMPLS))
+# $(shell ocamlfind query -recursive -predicates native -l-format gettext gettext.base gettext.extension gettext-camomile camomile)
+
 # OCaml libraries for the bytecode version
 # File extensions will be substituted for the native code version
-OCAMLLIBS = unix.cma str.cma gettext.cma
-OCAMLINCLUDES = -I +unix -I +str -I +gettext
+OCAMLLIBS = unix.cma str.cma bigarray.cmxa $(GETTEXT_IMPLS)
+OCAMLINCLUDES = -I +unix -I +str $(TEMP_STUFF_OPAM_LINKING) -I languages
 
 # C objects for both bytecode and native versions
 COBJS = osxsupport$(OBJ_EXT) pty$(OBJ_EXT) bytearray_stubs$(OBJ_EXT) \
@@ -105,7 +127,7 @@ CAMLFLAGS_MAC = -I +threads
 
 ## Graphic UI
 OCAMLOBJS_GUI = pixmaps.cmo uigtk3.cmo linkgtk3.cmo
-OCAMLLIBS_GUI = lablgtk3.cma cairo.cma gettext.cma
+OCAMLLIBS_GUI = lablgtk3.cma cairo.cma gettext.cma gettextCamomile.cma
 
 ####################################################################
 ### Unison executables
@@ -216,7 +238,9 @@ include Makefile2.cfg
 
 $(NAME)$(EXEC_EXT): $(COMPAT_OBJS) $(CAMLOBJS) $(CAMLOBJS_TUI) $(COBJS)
 	@echo Linking $@
-	$(CAMLC) -verbose $(CAMLFLAGS_X) $(CAMLLDFLAGS) -o $@ $(CAMLLIBS) $(ALL__SRC) $(CLIBS)
+	$(CAMLC) -verbose $(CAMLFLAGS_X) $(CAMLLDFLAGS) -o $@ \
+		$(GETTEXT_IMPLS) \
+		$(CAMLLIBS) $(ALL__SRC) $(CLIBS)
 
 $(NAME_GUI)$(EXEC_EXT): $(COMPAT_OBJS) $(CAMLOBJS) $(CAMLOBJS_GUI) $(COBJS)
 	@echo Linking $@
