@@ -18,7 +18,7 @@
 
 open Common
 open Lwt
-open Lib
+open Lang_lib
 
 module Private = struct
 
@@ -1157,7 +1157,7 @@ let createProfile parent =
  (*       ~text:"Welcome to the Unison Profile Creation Assistant.\n\n\
              Click \"Next\" to begin."
           ~text: (s_ "WelcomeProfileCreationAssistant") *)
-          ~text: (Lib.TranslateLib.s_ "TranslationTestString")
+          ~text: (TranslateLib.s_ "TranslationTestString")
     () in
   ignore
     (assistant#append_page

@@ -1,13 +1,11 @@
+; Old dune does not seem to allow to conditionally include library
+; there are workarounds with select, but this attempt failed
+; (dirs :standard \ languages)
+
 (library
  (name compat)
  (wrapped false)
  (modules compat_digest))
-
-(library
- (name internationalization)
- (wrapped false)
- (libraries gettext.base gettext.camomile)
- (modules bin lib))
 
 (library
  (name unison_lib)
@@ -23,7 +21,7 @@
   (language c)
   (names bytearray_stubs osxsupport pty hash_compat props_xattr props_acl copy_stubs))
  (c_library_flags -lutil)
- (libraries compat str unix lwt_lib bigarray))
+ (libraries compat str unix lwt_lib bigarray ))
 
 (include_subdirs unqualified)
 
@@ -32,7 +30,7 @@
  (public_name unison)
  (package unison) ; Dummy: we don't use packages
  (modules linktext)
- (libraries unison_lib internationalization))
+ (libraries unison_lib ))
 
 (executable
  (name linkgtk3)
@@ -40,4 +38,4 @@
  (package unison-gui) ; Dummy: we don't use packages
  (flags :standard -w -3-6-9-27-32-52)
  (modules linkgtk3 uigtk3 pixmaps)
- (libraries threads unison_lib lablgtk3 internationalization))
+ (libraries threads unison_lib lablgtk3))
