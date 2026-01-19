@@ -50,15 +50,12 @@ GETTEXT_DIRS = -I $(OCAMLPATH)/camomile/default_config \
 		-I $(OCAMLPATH)/gettext-camomile        \
 		-I languages
 else
-GETTEXT_DIRS =
+GETTEXT_DIRS = -I languages
 endif
 ####################################################################
 ### Default parameters
 
-INCLFLAGS = -I lwt -I ubase -I system -I system/$(SYSTEM) -I lwt/$(SYSTEM)
-ifdef GETTEXT_ENABLED
-INCFLAGS += -I languages
-endif
+INCLFLAGS = -I lwt -I ubase -I system -I system/$(SYSTEM) -I lwt/$(SYSTEM) -I languages
 DEP_INCLFLAGS = -I lwt -I ubase -I system \
                 -I fsmonitor -I fsmonitor/inotify -I fsmonitor/solaris -I fsmonitor/windows \
 
@@ -95,7 +92,9 @@ OCAMLOBJS = \
           lwt/$(SYSTEM)/lwt_unix_impl.cmo lwt/lwt_unix.cmo \
 
 ifdef GETTEXT_ENABLED
-OCAMLOBJS += languages/lang_lib.cmo languages/lang_bin.cmo
+OCAMLOBJS += languages/langs_lib.enabled.cmo languages/lang_lib.cmo languages/lang_bin.cmo
+else
+OCAMLOBJS += languages/langs_lib.disabled.cmo languages/lang_fallback.cmo
 endif
 
 OCAMLOBJS += features.cmo uutil.cmo case.cmo pred.cmo terminal.cmo \
